@@ -26,4 +26,4 @@ This application is to schedule out your work day. The current date is displayed
 
 ---
 
-image goes here
+![Work-Day-Scheduler](https://user-images.githubusercontent.com/108437661/187560374-afb9a97c-8e86-4d9d-9a50-5f78466f083d.png)

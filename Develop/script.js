@@ -16,81 +16,80 @@ function loadSchedule() {
     var dt = new Date($.now());
     var currentHour = dt.getHours();
 
-    // loop the entire following code
-    // loop through the entire time array
-    // change time[0] to time[i]
+    for (let i = 0; i < time.length; i++) {
 
+        var scheduleTime = time[i].substring(0, time[i].indexOf(" "));
+        var amPm = "";
+        if (scheduleTime >= 12) {
+            amPm = "PM";
+        } else {
+            amPm = "AM";
+        }
 
+        var relativeTime = "";
+        if (currentHour == scheduleTime) {
+            relativeTime = "present";
+        } else if (currentHour > scheduleTime) {
+            relativeTime = "past";
+        } else {
+            relativeTime = "future";
+        }
 
-    var scheduleTime = time[0].substring(0, time[0].indexOf(" "));
-    var amPm = "";
-    if (scheduleTime >= 12) {
-        amPm = "PM";
-    } else {
-        amPm = "AM";
-    }
-
-    var relativeTime = "";
-    console.log(currentHour);
-    console.log(scheduleTime);
-    if (currentHour == scheduleTime) {
-        relativeTime = "present";
-    } else if (currentHour > scheduleTime) {
-        relativeTime = "past";
-    } else {
-        relativeTime = "future";
-    }
-
-    if (scheduleTime > 12) {
-        scheduleTime = scheduleTime - 12;
-    }
-    // insert row div
-    var timeBlock = container.append(
-        "<div class=\"row no-gutters\">" +
-            "<div class=\"col\">" +
-                "<div id=" + scheduleTime + " class=\"hour\">" +
-                    "<p>" + scheduleTime + " " + amPm + "</p>" +
+        if (scheduleTime > 12) {
+            scheduleTime = scheduleTime - 12;
+        }
+        // insert row div
+        var timeBlock = container.append(
+            "<div class=\"row no-gutters\">" +
+                "<div class=\"col\">" +
+                    "<div class=\"hour\">" +
+                        "<p>" + scheduleTime + " " + amPm + "</p>" +
+                    "</div>" +
                 "</div>" +
-            "</div>" +
-            "<div class=\"col-10\">" +
-                "<div class=" + relativeTime + ">" +
-                    "<textarea id=" + scheduleTime +  scheduleTime + " class=\"description\" rows=\"3\" cols=\"100\"></textarea>" +
+                "<div class=\"col-10\">" +
+                    "<div class=" + relativeTime + ">" +
+                        "<textarea id=" + scheduleTime +  scheduleTime + " class=\"description\" rows=\"3\" cols=\"100\"></textarea>" +
+                    "</div>" +
                 "</div>" +
-            "</div>" +
-            "<div class=\"col\">" +
-                "<div class=\"saveBtn\">" +
-                    "<button id=" + scheduleTime + scheduleTime + scheduleTime + "><i class=\"far fa-floppy-disk\"></i></button>" +
+                "<div class=\"col\">" +
+                    "<div class=\"saveBtn\">" +
+                        "<button id=" + scheduleTime + scheduleTime + scheduleTime + "><ion-icon name=\"save-sharp\"></ion-icon></button>" +
+                    "</div>" +
                 "</div>" +
-            "</div>" +
-        "</div>");
-
-
+            "</div>");
+    };
 }
 
 function storeValue(id) {
-    // this is the id of the button clicked
     var id = id;
-
-    // get id of textarea by taking off last digit of id using substring
-    // get value from this id
-
-    // get id of hour by taking off last digit of textarea
-
-    // save to local storage by using hour id as key and textarea value as value
-
-
-
-    // in load schedule function we need to check to see if anything is in local storage and set the textarea value to whatever is set in local storage if anything
+    var textAreaId = "";
+    if (id.length > 3) {
+        textAreaId = id.substring(0, 4);
+    } else {
+       textAreaId = id.substring(0, 2);
+    }
+    var textArea = $("#" + textAreaId);
+    var textAreaValue = textArea.val();
+    localStorage.setItem(textAreaId, textAreaValue);
 }
 
-
-
+function loadValue () {
+    for (var i = 0; i < localStorage.length; i++) {
+        var key = localStorage.key(i);
+        var textArea = $("#" + key);
+        var text = localStorage.getItem(key);
+        textArea.val(text);
+    }
+}
 
 window.onload = function() {
     setDate();
     loadSchedule();
+    loadValue();
 }
 
-$("button").click(function() {
-    storeValue(this.id);
+$(document).ready(function(){
+    $("button").click(function() {
+        storeValue(this.id);
+    });
 });
